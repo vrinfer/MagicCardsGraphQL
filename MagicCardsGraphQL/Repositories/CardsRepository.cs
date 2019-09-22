@@ -1,7 +1,8 @@
 ﻿using MagicCardsGraphQL.Data;
 using MagicCardsGraphQL.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace MagicCardsGraphQL.Repositories
 {
@@ -14,9 +15,9 @@ namespace MagicCardsGraphQL.Repositories
             _dbContext = dbContext;
         }
 
-        public List<Card> GetAll()
+        public Task<List<Card>> GetAll()
         {
-            return _dbContext.Cards.ToList();
+            return _dbContext.Cards.ToListAsync();
         }
     }
 }

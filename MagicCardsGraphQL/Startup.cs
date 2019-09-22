@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using MagicCardsGraphQL.Data;
+using MagicCardsGraphQL.GraphQL;
 using MagicCardsGraphQL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +37,12 @@ namespace MagicCardsGraphQL
                 options.UseSqlServer(Configuration["ConnectionStrings:MagicCards"]));
 
             services.AddTransient<CardsRepository>();
+
+            services.AddScoped<IDependencyResolver>(x => new FuncDependencyResolver(x.GetRequiredService));
+            services.AddScoped<MagicCardsSchema>();
+
+            services.AddGraphQL(x => { x.ExposeExceptions = true; })
+                .AddGraphTypes(ServiceLifetime.Scoped); // Searches all product types and registered them in the container
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, MagicCardsDbContext dbContext)
@@ -46,8 +56,8 @@ namespace MagicCardsGraphQL
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseGraphQL<MagicCardsSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); // /ui/playground
             dbContext.Seed();
         }
     }

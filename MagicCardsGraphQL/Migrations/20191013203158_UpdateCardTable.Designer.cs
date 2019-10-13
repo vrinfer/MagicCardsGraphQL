@@ -3,14 +3,16 @@ using MagicCardsGraphQL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MagicCardsGraphQL.Migrations
 {
     [DbContext(typeof(MagicCardsDbContext))]
-    partial class MagicCardsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191013203158_UpdateCardTable")]
+    partial class UpdateCardTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
